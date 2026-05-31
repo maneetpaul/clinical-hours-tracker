@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MFT Clinical Hours Tracker</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, sans-serif;
+  background: #f4f4f5;
+  color: #18181b;
+  padding: 24px 20px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #09090b;
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  font-size: 12px;
+  color: #a1a1aa;
+  margin-bottom: 20px;
+}
+
+/* Input Panel */
+.input-panel {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05), 0 0 0 1px rgba(0,0,0,0.04);
+  margin-bottom: 16px;
+}
+
+.input-panel h2 {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #a1a1aa;
+  margin-bottom: 16px;
+}
+
+.input-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.input-group label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #52525b;
+}
+
+.input-group input {
+  padding: 9px 12px;
+  border: 1px solid #e4e4e7;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #09090b;
+  outline: none;
+  transition: border-color 0.15s;
+  width: 100%;
+}
+
+.input-group input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+}
+
+.input-group input[type="date"] {
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.input-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.input-row .input-group {
+  flex: 1;
+}
+
+/* Deadline pill */
+.deadline-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fef9c3;
+  border: 1px solid #fde047;
+  color: #713f12;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+}
+
+/* Cards */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05), 0 0 0 1px rgba(0,0,0,0.04);
+}
+
+.card-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #a1a1aa;
+  margin-bottom: 14px;
+}
+
+.donut-wrap {
+  position: relative;
+  width: 130px;
+  height: 130px;
+  margin: 0 auto 12px;
+}
+
+.donut-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.donut-pct {
+  font-size: 21px;
+  font-weight: 800;
+  color: #09090b;
+  line-height: 1;
+}
+
+.donut-sub {
+  font-size: 10px;
+  color: #a1a1aa;
+  margin-top: 2px;
+}
+
+.donut-caption {
+  text-align: center;
+  font-size: 13px;
+  color: #52525b;
+}
+
+.donut-caption strong {
+  color: #09090b;
+  font-weight: 700;
+}
+
+.stat-number {
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1;
+  color: #09090b;
+  margin-bottom: 4px;
+}
+
+.stat-label { font-size: 12px; color: #71717a; }
+
+.pace-green  { color: #16a34a; }
+.pace-yellow { color: #d97706; }
+.pace-red    { color: #dc2626; }
+
+@media (max-width: 500px) {
+  .grid-2, .grid-3, .input-grid { grid-template-columns: 1fr; }
+  .input-row { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<h1>MFT Clinical Hours Tracker</h1>
+<p class="subtitle">Enter your current hours to see your pace toward licensure requirements.</p>
+
+<!-- Input Panel -->
+<div class="input-panel">
+  <h2>Your Hours</h2>
+  <div class="input-grid">
+    <div class="input-group">
+      <label for="totalHours">Total Clinical Hours</label>
+      <input type="number" id="totalHours" min="0" max="500" placeholder="0" oninput="render()">
+    </div>
+    <div class="input-group">
+      <label for="relHours">Relational Hours</label>
+      <input type="number" id="relHours" min="0" max="250" placeholder="0" oninput="render()">
+    </div>
+  </div>
+  <div class="input-group">
+    <label for="deadline">Deadline Date</label>
+    <input type="date" id="deadline" oninput="render()">
+  </div>
+</div>
+
+<div class="deadline-pill" id="deadlinePill">🎓 Set a deadline above</div>
+
+<div class="grid-2">
+  <div class="card">
+    <div class="card-label">Total Clinical Hours</div>
+    <div class="donut-wrap">
+      <canvas id="totalChart"></canvas>
+      <div class="donut-center">
+        <span class="donut-pct" id="totalPct">0%</span>
+        <span class="donut-sub">done</span>
+      </div>
+    </div>
+    <div class="donut-caption" id="totalCaption">0 of 500 hours</div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Relational Hours</div>
+    <div class="donut-wrap">
+      <canvas id="relChart"></canvas>
+      <div class="donut-center">
+        <span class="donut-pct" id="relPct">0%</span>
+        <span class="donut-sub">done</span>
+      </div>
+    </div>
+    <div class="donut-caption" id="relCaption">0 of 250 hours</div>
+  </div>
+</div>
+
+<div class="grid-3">
+  <div class="card">
+    <div class="card-label">Weeks Remaining</div>
+    <div class="stat-number" id="weeksLeft">—</div>
+    <div class="stat-label" id="weeksLabel">set a deadline</div>
+  </div>
+  <div class="card">
+    <div class="card-label">Total Hrs / Week Needed</div>
+    <div class="stat-number" id="totalPerWeek">—</div>
+    <div class="stat-label" id="totalRemLabel" id="totalRemLabel">— hrs remaining</div>
+  </div>
+  <div class="card">
+    <div class="card-label">Relational Hrs / Week Needed</div>
+    <div class="stat-number" id="relPerWeek">—</div>
+    <div class="stat-label" id="relRemLabel">— hrs remaining</div>
+  </div>
+</div>
+
+<script>
+const TOTAL_REQUIRED = 500;
+const REL_REQUIRED = 250;
+
+let totalChart = null;
+let relChart = null;
+
+function makeDonut(id, value, max, color) {
+  const ctx = document.getElementById(id).getContext('2d');
+  return new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      datasets: [{
+        data: [Math.min(value, max), Math.max(0, max - value)],
+        backgroundColor: [color, '#f4f4f5'],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      cutout: '74%',
+      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      animation: { duration: 500, easing: 'easeInOutQuart' }
+    }
+  });
+}
+
+function updateDonut(chart, value, max) {
+  chart.data.datasets[0].data = [Math.min(value, max), Math.max(0, max - value)];
+  chart.update();
+}
+
+function paceClass(v) {
+  if (v <= 5) return 'pace-green';
+  if (v <= 9) return 'pace-yellow';
+  return 'pace-red';
+}
+
+function render() {
+  const totalNow = parseFloat(document.getElementById('totalHours').value) || 0;
+  const relNow   = parseFloat(document.getElementById('relHours').value) || 0;
+  const deadlineVal = document.getElementById('deadline').value;
+
+  // Init charts on first render
+  if (!totalChart) {
+    totalChart = makeDonut('totalChart', totalNow, TOTAL_REQUIRED, '#3b82f6');
+    relChart   = makeDonut('relChart',   relNow,   REL_REQUIRED,   '#10b981');
+  } else {
+    updateDonut(totalChart, totalNow, TOTAL_REQUIRED);
+    updateDonut(relChart,   relNow,   REL_REQUIRED);
+  }
+
+  const totalPct = Math.min(100, totalNow / TOTAL_REQUIRED * 100);
+  const relPct   = Math.min(100, relNow   / REL_REQUIRED   * 100);
+
+  document.getElementById('totalPct').textContent = totalPct.toFixed(1) + '%';
+  document.getElementById('relPct').textContent   = relPct.toFixed(1)   + '%';
+
+  document.getElementById('totalCaption').innerHTML =
+    `<strong>${totalNow}</strong> of ${TOTAL_REQUIRED} hours`;
+  document.getElementById('relCaption').innerHTML =
+    `<strong>${relNow}</strong> of ${REL_REQUIRED} hours`;
+
+  const totalRem = Math.max(0, TOTAL_REQUIRED - totalNow);
+  const relRem   = Math.max(0, REL_REQUIRED - relNow);
+
+  document.getElementById('totalRemLabel').textContent = `${totalRem} hrs remaining`;
+  document.getElementById('relRemLabel').textContent   = `${relRem} hrs remaining`;
+
+  if (deadlineVal) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const dl = new Date(deadlineVal + 'T00:00:00');
+    const weeksLeft = Math.max(0, (dl - today) / (1000 * 60 * 60 * 24 * 7));
+    const weeksFloor = Math.floor(weeksLeft);
+
+    const label = dl.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    document.getElementById('deadlinePill').textContent = `🎓 Deadline: ${label}`;
+
+    document.getElementById('weeksLeft').textContent = weeksFloor;
+    document.getElementById('weeksLabel').textContent = `until ${label}`;
+
+    if (weeksLeft > 0) {
+      const totalPerWeek = totalRem / weeksLeft;
+      const relPerWeek   = relRem / weeksLeft;
+
+      document.getElementById('totalPerWeek').innerHTML =
+        `<span class="${paceClass(totalPerWeek)}">${totalPerWeek.toFixed(1)}</span>`;
+      document.getElementById('relPerWeek').innerHTML =
+        `<span class="${paceClass(relPerWeek)}">${relPerWeek.toFixed(1)}</span>`;
+    } else {
+      document.getElementById('totalPerWeek').textContent = '—';
+      document.getElementById('relPerWeek').textContent   = '—';
+    }
+  } else {
+    document.getElementById('deadlinePill').textContent = '🎓 Set a deadline above';
+    document.getElementById('weeksLeft').textContent    = '—';
+    document.getElementById('weeksLabel').textContent   = 'set a deadline';
+    document.getElementById('totalPerWeek').textContent = '—';
+    document.getElementById('relPerWeek').textContent   = '—';
+  }
+}
+
+// Initialize charts on load
+window.addEventListener('load', render);
+</script>
+</body>
+</html>
