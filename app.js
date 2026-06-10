@@ -38,16 +38,11 @@ function updateDonut(chart, value, max) {
   chart.update();
 }
 
-function paceClass(v) {
-  if (v <= 5) return 'pace-green';
-  if (v <= 9) return 'pace-yellow';
-  return 'pace-red';
-}
-
-function paceBadge(v) {
-  if (v <= 5) return ['badge-green',  '✓ On track'];
-  if (v <= 9) return ['badge-yellow', '⚠ Keep pace'];
-  return           ['badge-red',    '↑ Behind'];
+// Badge based on caseload surplus relative to needed pace — no arbitrary fixed thresholds
+function caseloadBadge(surplus, needed) {
+  if (surplus >= 0)                        return ['badge-green',  '✓ Covered'];
+  if (surplus >= -0.2 * needed)            return ['badge-yellow', '⚠ Close'];
+  return                                          ['badge-red',    '↑ Below pace'];
 }
 
 function confettiBurst() {
@@ -123,18 +118,9 @@ function render() {
       const totalPerWeek = totalRem / weeksLeft;
       const relPerWeek   = relRem   / weeksLeft;
 
-      const [tClass, tLabel] = paceBadge(totalPerWeek);
-      const [rClass, rLabel] = paceBadge(relPerWeek);
-
-      document.getElementById('totalPerWeek').innerHTML =
-        `<span class="${paceClass(totalPerWeek)}">${totalPerWeek.toFixed(1)}</span>`;
-      document.getElementById('totalPaceBadge').innerHTML =
-        `<span class="pace-badge ${tClass}">${tLabel}</span>`;
-
-      document.getElementById('relPerWeek').innerHTML =
-        `<span class="${paceClass(relPerWeek)}">${relPerWeek.toFixed(1)}</span>`;
-      document.getElementById('relPaceBadge').innerHTML =
-        `<span class="pace-badge ${rClass}">${rLabel}</span>`;
+      // Hrs/week numbers are neutral — color only comes from caseload comparison
+      document.getElementById('totalPerWeek').textContent = totalPerWeek.toFixed(1);
+      document.getElementById('relPerWeek').textContent   = relPerWeek.toFixed(1);
 
       // Caseload projection (1 session/week per client = 1 hr/week per client)
       if (caseloadVisible && (totalClients > 0 || relClients > 0)) {
@@ -143,19 +129,28 @@ function render() {
 
         const totalSurplus = caseloadTotalPerWeek - totalPerWeek;
         const relSurplus   = caseloadRelPerWeek   - relPerWeek;
-
         const fmt = (n) => Math.abs(n).toFixed(1);
+
+        const [tClass, tLabel] = caseloadBadge(totalSurplus, totalPerWeek);
+        const [rClass, rLabel] = caseloadBadge(relSurplus,   relPerWeek);
+
+        document.getElementById('totalPaceBadge').innerHTML =
+          totalClients > 0 ? `<span class="pace-badge ${tClass}">${tLabel}</span>` : '';
+        document.getElementById('relPaceBadge').innerHTML =
+          relClients > 0   ? `<span class="pace-badge ${rClass}">${rLabel}</span>` : '';
 
         totalCaseloadEl.style.display = 'block';
         totalCaseloadEl.innerHTML = totalClients > 0
-          ? `Your caseload generates ~<strong>${caseloadTotalPerWeek} hrs/wk</strong> — that's ${totalSurplus >= 0 ? `<strong style="color:var(--green)">+${fmt(totalSurplus)} above</strong>` : `<strong style="color:var(--red)">−${fmt(totalSurplus)} below</strong>`} what you need.`
-          : `Enter clients above to see projection.`;
+          ? `Your caseload generates ~<strong>${caseloadTotalPerWeek} hrs/wk</strong> — ${totalSurplus >= 0 ? `<strong style="color:var(--green)">+${fmt(totalSurplus)} above</strong>` : `<strong style="color:var(--red)">−${fmt(totalSurplus)} below</strong>`} what you need.`
+          : '';
 
         relCaseloadEl.style.display = 'block';
         relCaseloadEl.innerHTML = relClients > 0
-          ? `Your relational caseload generates ~<strong>${caseloadRelPerWeek} hrs/wk</strong> — that's ${relSurplus >= 0 ? `<strong style="color:var(--green)">+${fmt(relSurplus)} above</strong>` : `<strong style="color:var(--red)">−${fmt(relSurplus)} below</strong>`} what you need.`
-          : `Enter relational clients above to see projection.`;
+          ? `Your relational caseload generates ~<strong>${caseloadRelPerWeek} hrs/wk</strong> — ${relSurplus >= 0 ? `<strong style="color:var(--green)">+${fmt(relSurplus)} above</strong>` : `<strong style="color:var(--red)">−${fmt(relSurplus)} below</strong>`} what you need.`
+          : '';
       } else {
+        document.getElementById('totalPaceBadge').innerHTML = '';
+        document.getElementById('relPaceBadge').innerHTML   = '';
         totalCaseloadEl.style.display = 'none';
         relCaseloadEl.style.display   = 'none';
       }
