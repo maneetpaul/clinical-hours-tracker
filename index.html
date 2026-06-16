@@ -46,6 +46,20 @@
         <span class="hero-target">of <span id="relReqTile">250</span></span>
       </label>
     </div>
+
+    <details class="req-details">
+      <summary>Change hour requirements</summary>
+      <div class="input-grid">
+        <div class="input-group">
+          <label for="reqTotal">Total Hours Required</label>
+          <input type="number" id="reqTotal" min="1" value="500" oninput="render()">
+        </div>
+        <div class="input-group">
+          <label for="reqRel">Relational Hours Required</label>
+          <input type="number" id="reqRel" min="1" value="250" oninput="render()">
+        </div>
+      </div>
+    </details>
   </section>
 
   <!-- ── Section 2: Timeline ── -->
@@ -62,20 +76,6 @@
       </label>
       <input type="date" id="deadline" oninput="render()">
     </div>
-
-    <details class="req-details">
-      <summary>Change hour requirements</summary>
-      <div class="input-grid">
-        <div class="input-group">
-          <label for="reqTotal">Total Hours Required</label>
-          <input type="number" id="reqTotal" min="1" value="500" oninput="render()">
-        </div>
-        <div class="input-group">
-          <label for="reqRel">Relational Hours Required</label>
-          <input type="number" id="reqRel" min="1" value="250" oninput="render()">
-        </div>
-      </div>
-    </details>
   </section>
 
   <!-- ── Section 3: Caseload (optional) ── -->
