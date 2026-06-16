@@ -17,33 +17,55 @@
   <header class="header">
     <div class="header-eyebrow">MFT Graduate Program</div>
     <h1>Clinical Hours <span>Tracker</span></h1>
-    <p class="subtitle">Enter your hours below to see your pace toward graduation — no account, no data sent anywhere.</p>
+    <p class="subtitle">See your pace toward graduation — no account, no data sent anywhere.</p>
   </header>
 
-  <!-- Input Panel -->
-  <div class="input-panel">
-    <div class="panel-label">Start here · Your hours</div>
-    <p class="panel-hint">Enter the hours you've logged so far. <strong>Both fields are required</strong> to calculate your pace.</p>
-
-    <div class="input-grid">
-      <div class="input-group">
-        <label for="totalHours">Total Clinical Hours</label>
-        <input type="number" id="totalHours" min="0" inputmode="numeric" placeholder="e.g. 120" oninput="render()">
-      </div>
-      <div class="input-group">
-        <label for="relHours">Relational Hours</label>
-        <input type="number" id="relHours" min="0" inputmode="numeric" placeholder="e.g. 60" oninput="render()">
-      </div>
+  <!-- ── Section 1: Your Hours ── -->
+  <section class="section">
+    <div class="section-head">
+      <span class="step-badge">1</span>
+      <span class="section-title">Your hours</span>
     </div>
 
-    <div class="input-group" style="margin-bottom: 12px;">
-      <label for="deadline">Deadline Date</label>
+    <div class="hero-grid">
+      <label class="hero-tile tile-indigo" for="totalHours">
+        <span class="hero-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 1.5"/></svg>
+        </span>
+        <span class="hero-label">Clinical Hours</span>
+        <input type="number" id="totalHours" class="hero-input" min="0" inputmode="numeric" placeholder="0" oninput="render()">
+        <span class="hero-target">of <span id="totalReqTile">500</span></span>
+      </label>
+
+      <label class="hero-tile tile-teal" for="relHours">
+        <span class="hero-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 19v-1a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v1"/><circle cx="9" cy="7" r="3.5"/><path d="M22 19v-1a4 4 0 0 0-3-3.86"/><path d="M16 3.5a4 4 0 0 1 0 7"/></svg>
+        </span>
+        <span class="hero-label">Relational Hours</span>
+        <input type="number" id="relHours" class="hero-input" min="0" inputmode="numeric" placeholder="0" oninput="render()">
+        <span class="hero-target">of <span id="relReqTile">250</span></span>
+      </label>
+    </div>
+  </section>
+
+  <!-- ── Section 2: Timeline ── -->
+  <section class="section">
+    <div class="section-head">
+      <span class="step-badge">2</span>
+      <span class="section-title">Timeline</span>
+    </div>
+
+    <div class="timeline-row">
+      <label for="deadline">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M16 2.5v4M8 2.5v4M3 9.5h18"/></svg>
+        Deadline
+      </label>
       <input type="date" id="deadline" oninput="render()">
     </div>
 
-    <details>
-      <summary>⚙️ Change hour requirements</summary>
-      <div class="input-grid" style="margin-top: 0;">
+    <details class="req-details">
+      <summary>Change hour requirements</summary>
+      <div class="input-grid">
         <div class="input-group">
           <label for="reqTotal">Total Hours Required</label>
           <input type="number" id="reqTotal" min="1" value="500" oninput="render()">
@@ -54,85 +76,110 @@
         </div>
       </div>
     </details>
-  </div>
+  </section>
 
-  <!-- Caseload Toggle -->
-  <button class="caseload-toggle" id="caseloadToggle" onclick="toggleCaseload()">
-    📋 Add caseload details <span id="caseloadToggleLabel">— optional, helps project your pace</span>
-  </button>
-
-  <!-- Caseload Panel (hidden by default) -->
-  <div class="caseload-panel" id="caseloadPanel" style="display:none;">
-    <div class="panel-label">Current Caseload</div>
-    <p class="caseload-hint">
-      Enter your active weekly caseload. This lets the tracker estimate how many hours you're generating per week and whether your caseload will get you there in time.
-    </p>
-    <div class="input-grid">
-      <div class="input-group">
-        <label for="totalClients">Total Active Clients</label>
-        <input type="number" id="totalClients" min="0" inputmode="numeric" placeholder="e.g. 8" oninput="render()">
-      </div>
-      <div class="input-group">
-        <label for="relClients">Relational Clients</label>
-        <input type="number" id="relClients" min="0" inputmode="numeric" placeholder="e.g. 5" oninput="render()">
-      </div>
+  <!-- ── Section 3: Caseload (optional) ── -->
+  <section class="section">
+    <div class="section-head">
+      <span class="step-badge step-badge-muted">3</span>
+      <span class="section-title">Caseload</span>
+      <span class="section-tag">optional</span>
     </div>
-  </div>
 
-  <!-- Deadline Pill -->
-  <div class="deadline-pill" id="deadlinePill">🎓 Set a deadline above</div>
+    <button class="caseload-toggle" id="caseloadToggle" onclick="toggleCaseload()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+      <span id="caseloadToggleLabel">Add your caseload to project a finish date</span>
+    </button>
 
-  <!-- Progress Rings -->
-  <div class="grid-2">
-    <div class="card total-card">
-      <div class="card-label"><span class="card-icon">🔵</span> Total Clinical Hours</div>
-      <div class="donut-wrap">
-        <canvas id="totalChart"></canvas>
-        <div class="donut-center">
-          <span class="donut-pct" id="totalPct">0%</span>
-          <span class="donut-sub">complete</span>
+    <div class="caseload-panel" id="caseloadPanel" style="display:none;">
+      <p class="caseload-hint">
+        Enter your active weekly caseload. The tracker uses this to estimate how many hours you're generating per week and when you'll finish.
+      </p>
+      <div class="input-grid">
+        <div class="input-group">
+          <label for="totalClients">Total Active Clients</label>
+          <input type="number" id="totalClients" min="0" inputmode="numeric" placeholder="e.g. 8" oninput="render()">
+        </div>
+        <div class="input-group">
+          <label for="relClients">Relational Clients</label>
+          <input type="number" id="relClients" min="0" inputmode="numeric" placeholder="e.g. 5" oninput="render()">
         </div>
       </div>
-      <div class="donut-caption" id="totalCaption">0 of 500 hours</div>
+    </div>
+  </section>
+
+  <!-- ── Results ── -->
+  <section class="section results-section">
+    <div class="section-head">
+      <span class="section-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 12V3"/><path d="M12 12l7 4.5"/></svg>
+      </span>
+      <span class="section-title">Your results</span>
     </div>
 
-    <div class="card rel-card">
-      <div class="card-label"><span class="card-icon">🟢</span> Relational Hours</div>
-      <div class="donut-wrap">
-        <canvas id="relChart"></canvas>
-        <div class="donut-center">
-          <span class="donut-pct" id="relPct">0%</span>
-          <span class="donut-sub">complete</span>
+    <div class="deadline-pill" id="deadlinePill">Set a deadline above</div>
+
+    <!-- Progress Rings -->
+    <div class="grid-2">
+      <div class="card total-card">
+        <div class="card-label"><span class="dot dot-indigo"></span> Total Clinical Hours</div>
+        <div class="donut-wrap">
+          <canvas id="totalChart"></canvas>
+          <div class="donut-center">
+            <span class="donut-pct" id="totalPct">0%</span>
+            <span class="donut-sub">complete</span>
+          </div>
         </div>
+        <div class="donut-caption" id="totalCaption">0 of 500 hours</div>
       </div>
-      <div class="donut-caption" id="relCaption">0 of 250 hours</div>
-    </div>
-  </div>
 
-  <!-- Stat Cards -->
-  <div class="grid-3">
-    <div class="card">
-      <div class="card-label"><span class="card-icon">📅</span> Weeks Remaining</div>
-      <div class="stat-number" id="weeksLeft">—</div>
-      <div class="stat-label" id="weeksLabel">set a deadline</div>
-    </div>
-
-    <div class="card">
-      <div class="card-label"><span class="card-icon">⏱</span> Total Hrs / Week</div>
-      <div class="stat-number" id="totalPerWeek">—</div>
-      <div class="stat-label" id="totalRemLabel">— hrs remaining</div>
-      <div id="totalPaceBadge"></div>
-      <div class="caseload-pace" id="totalCaseloadPace" style="display:none;"></div>
+      <div class="card rel-card">
+        <div class="card-label"><span class="dot dot-teal"></span> Relational Hours</div>
+        <div class="donut-wrap">
+          <canvas id="relChart"></canvas>
+          <div class="donut-center">
+            <span class="donut-pct" id="relPct">0%</span>
+            <span class="donut-sub">complete</span>
+          </div>
+        </div>
+        <div class="donut-caption" id="relCaption">0 of 250 hours</div>
+      </div>
     </div>
 
-    <div class="card">
-      <div class="card-label"><span class="card-icon">🤝</span> Relational Hrs / Week</div>
-      <div class="stat-number" id="relPerWeek">—</div>
-      <div class="stat-label" id="relRemLabel">— hrs remaining</div>
-      <div id="relPaceBadge"></div>
-      <div class="caseload-pace" id="relCaseloadPace" style="display:none;"></div>
+    <!-- Stat Cards -->
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-label">
+          <svg class="card-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M16 2.5v4M8 2.5v4M3 9.5h18"/></svg>
+          Weeks Remaining
+        </div>
+        <div class="stat-number" id="weeksLeft">—</div>
+        <div class="stat-label" id="weeksLabel">set a deadline</div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">
+          <svg class="card-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 1.5"/></svg>
+          Total Hrs / Week
+        </div>
+        <div class="stat-number" id="totalPerWeek">—</div>
+        <div class="stat-label" id="totalRemLabel">— hrs remaining</div>
+        <div id="totalPaceBadge"></div>
+        <div class="caseload-pace" id="totalCaseloadPace" style="display:none;"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">
+          <svg class="card-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 19v-1a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v1"/><circle cx="9" cy="7" r="3.5"/><path d="M22 19v-1a4 4 0 0 0-3-3.86"/><path d="M16 3.5a4 4 0 0 1 0 7"/></svg>
+          Relational Hrs / Week
+        </div>
+        <div class="stat-number" id="relPerWeek">—</div>
+        <div class="stat-label" id="relRemLabel">— hrs remaining</div>
+        <div id="relPaceBadge"></div>
+        <div class="caseload-pace" id="relCaseloadPace" style="display:none;"></div>
+      </div>
     </div>
-  </div>
+  </section>
 
   <script src="app.js"></script>
 </body>

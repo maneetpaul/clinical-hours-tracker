@@ -8,8 +8,8 @@ function toggleCaseload() {
   caseloadVisible = !caseloadVisible;
   document.getElementById('caseloadPanel').style.display = caseloadVisible ? 'block' : 'none';
   document.getElementById('caseloadToggleLabel').textContent = caseloadVisible
-    ? '— tap to hide'
-    : '— optional, helps project your pace';
+    ? 'Hide caseload'
+    : 'Add your caseload to project a finish date';
   render();
 }
 
@@ -110,6 +110,10 @@ function render() {
 
   document.getElementById('totalCaption').innerHTML = `<strong>${totalNow}</strong> of ${TOTAL_REQUIRED} hours`;
   document.getElementById('relCaption').innerHTML   = `<strong>${relNow}</strong> of ${REL_REQUIRED} hours`;
+
+  // Keep the hero tile targets in sync with the requirements
+  document.getElementById('totalReqTile').textContent = TOTAL_REQUIRED;
+  document.getElementById('relReqTile').textContent   = REL_REQUIRED;
 
   const totalRem = Math.max(0, TOTAL_REQUIRED - totalNow);
   const relRem   = Math.max(0, REL_REQUIRED   - relNow);
