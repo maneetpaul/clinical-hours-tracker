@@ -8,7 +8,7 @@ function toggleCaseload() {
   caseloadVisible = !caseloadVisible;
   document.getElementById('caseloadPanel').style.display = caseloadVisible ? 'block' : 'none';
   document.getElementById('caseloadToggleLabel').textContent = caseloadVisible
-    ? '— click to hide'
+    ? '— tap to hide'
     : '— optional, helps project your pace';
   render();
 }
@@ -43,6 +43,34 @@ function caseloadBadge(surplus, needed) {
   if (surplus >= 0)                        return ['badge-green',  '✓ Covered'];
   if (surplus >= -0.2 * needed)            return ['badge-yellow', '⚠ Close'];
   return                                          ['badge-red',    '↑ Below pace'];
+}
+
+// Project an estimated finish date from the current caseload pace (hrs generated per week)
+function projectionLine(remaining, perWeek, weeksLeft) {
+  if (remaining <= 0) {
+    return `<span style="color:var(--green)">🎉 Requirement met!</span>`;
+  }
+  if (perWeek <= 0) return '';
+
+  const weeksToFinish = remaining / perWeek;
+  const finish = new Date();
+  finish.setHours(0, 0, 0, 0);
+  finish.setDate(finish.getDate() + Math.ceil(weeksToFinish * 7));
+  const finishLabel = finish.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+  const diffWeeks = Math.round(Math.abs(weeksLeft - weeksToFinish));
+  const wk = (n) => `${n} wk${n === 1 ? '' : 's'}`;
+
+  let context;
+  if (weeksToFinish <= weeksLeft) {
+    context = diffWeeks === 0
+      ? `right around your deadline`
+      : `<strong style="color:var(--green)">~${wk(diffWeeks)} early</strong>`;
+  } else {
+    context = `<strong style="color:var(--red)">~${wk(diffWeeks)} past deadline</strong>`;
+  }
+
+  return `📅 On pace to finish <strong>${finishLabel}</strong> — ${context}.`;
 }
 
 function confettiBurst() {
@@ -139,14 +167,19 @@ function render() {
         document.getElementById('relPaceBadge').innerHTML =
           relClients > 0   ? `<span class="pace-badge ${rClass}">${rLabel}</span>` : '';
 
+        const totalProj = projectionLine(totalRem, caseloadTotalPerWeek, weeksLeft);
+        const relProj   = projectionLine(relRem,   caseloadRelPerWeek,   weeksLeft);
+
         totalCaseloadEl.style.display = 'block';
         totalCaseloadEl.innerHTML = totalClients > 0
           ? `Your caseload generates ~<strong>${caseloadTotalPerWeek} hrs/wk</strong> — ${totalSurplus >= 0 ? `<strong style="color:var(--green)">+${fmt(totalSurplus)} above</strong>` : `<strong style="color:var(--red)">−${fmt(totalSurplus)} below</strong>`} what you need.`
+            + (totalProj ? `<div class="projection">${totalProj}</div>` : '')
           : '';
 
         relCaseloadEl.style.display = 'block';
         relCaseloadEl.innerHTML = relClients > 0
           ? `Your relational caseload generates ~<strong>${caseloadRelPerWeek} hrs/wk</strong> — ${relSurplus >= 0 ? `<strong style="color:var(--green)">+${fmt(relSurplus)} above</strong>` : `<strong style="color:var(--red)">−${fmt(relSurplus)} below</strong>`} what you need.`
+            + (relProj ? `<div class="projection">${relProj}</div>` : '')
           : '';
       } else {
         document.getElementById('totalPaceBadge').innerHTML = '';
