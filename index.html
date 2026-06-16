@@ -81,30 +81,29 @@
   <!-- ── Section 3: Caseload (optional) ── -->
   <section class="section">
     <div class="section-head">
-      <span class="step-badge step-badge-muted">3</span>
-      <span class="section-title">Caseload</span>
+      <span class="step-badge">3</span>
+      <span class="section-title">How many active clients do you have?</span>
       <span class="section-tag">optional</span>
     </div>
 
-    <button class="caseload-toggle" id="caseloadToggle" onclick="toggleCaseload()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
-      <span id="caseloadToggleLabel">Add your caseload to estimate a finish date</span>
-    </button>
+    <div class="hero-grid">
+      <label class="hero-tile tile-indigo" for="totalClients">
+        <span class="hero-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 19v-1a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v1"/><circle cx="9" cy="7" r="3.5"/><path d="M22 19v-1a4 4 0 0 0-3-3.86"/><path d="M16 3.5a4 4 0 0 1 0 7"/></svg>
+        </span>
+        <span class="hero-label">Total Active Clients</span>
+        <input type="number" id="totalClients" class="hero-input" min="0" inputmode="numeric" placeholder="0" oninput="render()">
+        <span class="hero-target">≈ 1 hr/wk each</span>
+      </label>
 
-    <div class="caseload-panel" id="caseloadPanel" style="display:none;">
-      <p class="caseload-hint">
-        Enter your active weekly caseload. The tracker uses this to estimate how many hours you're generating per week and when you'll finish.
-      </p>
-      <div class="input-grid">
-        <div class="input-group">
-          <label for="totalClients">Total Active Clients</label>
-          <input type="number" id="totalClients" min="0" inputmode="numeric" placeholder="e.g. 8" oninput="render()">
-        </div>
-        <div class="input-group">
-          <label for="relClients">Relational Clients</label>
-          <input type="number" id="relClients" min="0" inputmode="numeric" placeholder="e.g. 5" oninput="render()">
-        </div>
-      </div>
+      <label class="hero-tile tile-teal" for="relClients">
+        <span class="hero-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19.5 5.5a4.6 4.6 0 0 0-7.5 1 4.6 4.6 0 0 0-7.5-1c-1.9 1.9-1.9 4.8 0 6.7l7.5 7.3 7.5-7.3c1.9-1.9 1.9-4.8 0-6.7z"/></svg>
+        </span>
+        <span class="hero-label">Relational Clients</span>
+        <input type="number" id="relClients" class="hero-input" min="0" inputmode="numeric" placeholder="0" oninput="render()">
+        <span class="hero-target">≈ 1 hr/wk each</span>
+      </label>
     </div>
   </section>
 

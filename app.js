@@ -2,16 +2,6 @@ let totalChart = null;
 let relChart   = null;
 let prevTotalComplete = false;
 let prevRelComplete   = false;
-let caseloadVisible = false;
-
-function toggleCaseload() {
-  caseloadVisible = !caseloadVisible;
-  document.getElementById('caseloadPanel').style.display = caseloadVisible ? 'block' : 'none';
-  document.getElementById('caseloadToggleLabel').textContent = caseloadVisible
-    ? 'Hide caseload'
-    : 'Add your caseload to estimate a finish date';
-  render();
-}
 
 function makeDonut(id, value, max, color, trackColor) {
   const ctx = document.getElementById(id).getContext('2d');
@@ -90,8 +80,8 @@ function render() {
   const TOTAL_REQUIRED = parseFloat(document.getElementById('reqTotal').value)   || 500;
   const REL_REQUIRED   = parseFloat(document.getElementById('reqRel').value)     || 250;
 
-  const totalClients = caseloadVisible ? (parseFloat(document.getElementById('totalClients').value) || 0) : 0;
-  const relClients   = caseloadVisible ? (parseFloat(document.getElementById('relClients').value)   || 0) : 0;
+  const totalClients = parseFloat(document.getElementById('totalClients').value) || 0;
+  const relClients   = parseFloat(document.getElementById('relClients').value)   || 0;
 
   // Charts
   if (!totalChart) {
@@ -155,7 +145,7 @@ function render() {
       document.getElementById('relPerWeek').textContent   = relPerWeek.toFixed(1);
 
       // Caseload projection (1 session/week per client = 1 hr/week per client)
-      if (caseloadVisible && (totalClients > 0 || relClients > 0)) {
+      if (totalClients > 0 || relClients > 0) {
         const caseloadTotalPerWeek = totalClients;
         const caseloadRelPerWeek   = relClients;
 
