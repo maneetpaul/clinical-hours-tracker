@@ -503,6 +503,14 @@ body {
 }
 
 /* ── Deadline pill ── */
+.deadline-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  margin-bottom: 18px;
+}
+
 .deadline-pill {
   display: inline-flex;
   align-items: center;
@@ -514,8 +522,13 @@ body {
   font-weight: 700;
   padding: 6px 14px;
   border-radius: 999px;
-  margin-bottom: 18px;
   letter-spacing: 0.01em;
+}
+
+.deadline-meta {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
 }
 
 /* Completion glow */

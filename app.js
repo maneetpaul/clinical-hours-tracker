@@ -133,8 +133,8 @@ function render() {
     const label = dl.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 
     document.getElementById('deadlinePill').textContent = `🎓 Deadline: ${label}`;
-    document.getElementById('weeksLeft').textContent    = weeksFloor;
-    document.getElementById('weeksLabel').textContent   = `until ${label}`;
+    document.getElementById('weeksRemainingNote').textContent =
+      weeksFloor === 1 ? '1 week remaining' : `${weeksFloor} weeks remaining`;
 
     if (weeksLeft > 0) {
       const totalPerWeek = totalRem / weeksLeft;
@@ -191,8 +191,7 @@ function render() {
     }
   } else {
     document.getElementById('deadlinePill').textContent   = '🎓 Set a deadline above';
-    document.getElementById('weeksLeft').textContent      = '—';
-    document.getElementById('weeksLabel').textContent     = 'set a deadline';
+    document.getElementById('weeksRemainingNote').textContent = '';
     document.getElementById('totalPerWeek').textContent   = '—';
     document.getElementById('totalPaceBadge').innerHTML   = '';
     document.getElementById('relPerWeek').textContent     = '—';
