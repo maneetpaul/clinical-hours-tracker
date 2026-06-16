@@ -9,7 +9,7 @@ function toggleCaseload() {
   document.getElementById('caseloadPanel').style.display = caseloadVisible ? 'block' : 'none';
   document.getElementById('caseloadToggleLabel').textContent = caseloadVisible
     ? 'Hide caseload'
-    : 'Add your caseload to project a finish date';
+    : 'Add your caseload to estimate a finish date';
   render();
 }
 
