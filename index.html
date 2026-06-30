@@ -69,12 +69,18 @@
       <span class="section-title">What's your timeline?</span>
     </div>
 
+    <div class="deadline-presets">
+      <button type="button" class="preset-chip" data-preset="next" onclick="setPreset('next')">June 1, <span id="nextYear">—</span></button>
+      <button type="button" class="preset-chip" data-preset="following" onclick="setPreset('following')">June 1, <span id="followingYearLabel">—</span></button>
+      <button type="button" class="preset-chip" data-preset="custom" onclick="setPreset('custom')">Custom date</button>
+    </div>
+
     <div class="timeline-row">
       <label for="deadline">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M16 2.5v4M8 2.5v4M3 9.5h18"/></svg>
         Deadline
       </label>
-      <input type="date" id="deadline" oninput="render()">
+      <input type="date" id="deadline" oninput="onDeadlineInput()">
     </div>
   </section>
 

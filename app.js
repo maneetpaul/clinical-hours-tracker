@@ -73,6 +73,55 @@ function confettiBurst() {
   });
 }
 
+// ── Deadline presets ──
+// The next June 1 still ahead on the calendar (this year's if it hasn't passed, else next year's)
+function nextJune1() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  let d = new Date(today.getFullYear(), 5, 1); // month 5 = June
+  if (d < today) d = new Date(today.getFullYear() + 1, 5, 1);
+  return d;
+}
+
+function followingJune1() {
+  const n = nextJune1();
+  return new Date(n.getFullYear() + 1, 5, 1);
+}
+
+function toISODate(d) {
+  const m   = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${d.getFullYear()}-${m}-${day}`;
+}
+
+// Highlight whichever chip matches the current deadline value
+function syncChips() {
+  const v = document.getElementById('deadline').value;
+  let mode = 'custom';
+  if (v === toISODate(nextJune1()))           mode = 'next';
+  else if (v === toISODate(followingJune1()))  mode = 'following';
+  document.querySelectorAll('.preset-chip').forEach(chip => {
+    chip.classList.toggle('active', chip.dataset.preset === mode);
+  });
+}
+
+function setPreset(mode) {
+  const input = document.getElementById('deadline');
+  if (mode === 'next')           input.value = toISODate(nextJune1());
+  else if (mode === 'following') input.value = toISODate(followingJune1());
+  else if (mode === 'custom') {
+    input.focus();
+    if (typeof input.showPicker === 'function') { try { input.showPicker(); } catch (e) {} }
+  }
+  syncChips();
+  render();
+}
+
+function onDeadlineInput() {
+  syncChips();
+  render();
+}
+
 function render() {
   const totalNow       = parseFloat(document.getElementById('totalHours').value) || 0;
   const relNow         = parseFloat(document.getElementById('relHours').value)   || 0;
@@ -202,6 +251,7 @@ function render() {
 }
 
 window.addEventListener('load', () => {
-  document.getElementById('deadline').value = '2027-06-01';
-  render();
+  document.getElementById('nextYear').textContent          = nextJune1().getFullYear();
+  document.getElementById('followingYearLabel').textContent = followingJune1().getFullYear();
+  setPreset('next');
 });
