@@ -1,7 +1,7 @@
 # clinical-hours-tracker
 
 Read `docs/PROJECT-GUIDE.md` first for context.
-Setup and conventions: `~/obsidian-vault/AI/skills/project-setup.md`
+Setup and conventions: `~/vaults/second-brain/AI/skills/system/project-setup.md`
 
 ## Documentation upkeep
 
