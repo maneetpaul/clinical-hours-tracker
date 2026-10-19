@@ -24,7 +24,7 @@ No build step — it is static HTML/CSS/JS.
 - External libraries (Chart.js, canvas-confetti) and the Inter font load from CDNs.
 
 ## Standards this project depends on
-- [[project-setup]] — repo structure, git conventions, documentation rules.
+- [[project-setup]] (`~/vaults/second-brain/AI/skills/system/project-setup.md`) — repo structure, git conventions, documentation rules.
 - **Hosting exception:** this project uses **GitHub** as its origin remote and **GitHub Pages** as its host, rather than the Frosty bare-repo standard. GitHub Pages serves directly from the repo, so the code must live on GitHub. See the decision log.
 
 ## Decisions
