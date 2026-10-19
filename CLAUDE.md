@@ -17,7 +17,7 @@ Deferred documentation does not get written.
 - Do not document routine implementation the code already shows, or anything
   recoverable in under a minute by reading the source.
 
-**Shared standards** (`~/obsidian-vault/AI/standards/`)
+**Shared standards** (`~/vaults/second-brain/Notes/Frosty Config.md` and `~/vaults/second-brain/AI/skills/system/project-setup.md`)
 - The test: *does this fact affect anything outside this project?* If yes, update the
   standard too — not only the project guide.
 - Applies to Frosty paths, deploy steps, backup jobs, SSH, and permissions.
