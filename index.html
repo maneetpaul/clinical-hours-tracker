@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&display=swap">
-  <link rel="stylesheet" href="style.css?v=4">
+  <link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
 
@@ -114,18 +114,16 @@
     </ul>
   </details>
 
-  <aside class="promo">
-    <p>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 1.5M10 2.5h4"/></svg>
-      <span><b>Also by me: Sessions.</b> An iPhone and Apple Watch timer for your therapy sessions, so you never have to look at the clock.</span>
-    </p>
-    <a href="https://apps.apple.com/us/app/sessions-therapist-timer/id6786839255" target="_blank" rel="noopener">Download on the App Store</a>
-  </aside>
-
-  <div class="footer">
-    <span>Made for MFT students, by an MFT student. <a href="https://github.com/maneetpaul/clinical-hours-tracker" target="_blank" rel="noopener">Source</a></span>
+  <footer class="footer">
+    <div class="credits">
+      <p>Made for MFT students, by an MFT student. <a href="https://github.com/maneetpaul/clinical-hours-tracker" target="_blank" rel="noopener">Source</a></p>
+      <p class="sessions">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 1.5M10 2.5h4"/></svg>
+        <span>Also by me: <b>Sessions</b>, an iPhone and Apple Watch timer for your therapy sessions, so you never have to look at the clock. <a class="sessions-link" href="https://apps.apple.com/us/app/sessions-therapist-timer/id6786839255" target="_blank" rel="noopener">Get it on the App Store</a></span>
+      </p>
+    </div>
     <button type="button" class="text-btn" id="clearAll">Clear my numbers</button>
-  </div>
+  </footer>
 </div>
 
 <dialog id="reqDialog" aria-labelledby="reqTitle">
@@ -146,6 +144,6 @@
   </form>
 </dialog>
 
-<script src="app.js?v=4"></script>
+<script src="app.js?v=5"></script>
 </body>
 </html>
