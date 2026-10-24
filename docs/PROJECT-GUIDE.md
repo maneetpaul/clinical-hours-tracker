@@ -1,7 +1,9 @@
 # clinical-hours-tracker — Project Guide
 
 ## What this is
-A single-page web tool that helps MFT graduate students track clinical and relational hours toward their program's graduation requirements. You enter your hours so far, a June 1 deadline, and (optionally) your current caseload; it shows progress rings, the weekly pace required to finish on time, and — from caseload — an estimated finish date. No account, no backend, nothing leaves the browser.
+A single-page web tool that helps MFT graduate students track total and relational hours toward their program's graduation requirements. You fill in four boxes (hours so far, optional weekly caseload) and pick a deadline; the answer appears directly below: the weekly pace needed and, from caseload, an estimated finish month. No account, no backend, nothing leaves the browser; numbers persist in `localStorage`.
+
+Audience includes older, non-tech-savvy students, and it must keep working after the original author leaves the program — favour plain labelled inputs and plain language over cleverness.
 
 Live at https://maneetpaul.github.io/clinical-hours-tracker. Status: deployed and in active use.
 
@@ -11,17 +13,19 @@ No build step — it is static HTML/CSS/JS.
 - Deploy: push to `main`; GitHub Pages serves the site automatically within a minute or two.
 
 ## Key files
-- `index.html` — page structure and section markup
-- `style.css` — all styling; design tokens live in `:root` at the top
-- `app.js` — all logic: `render()`, the two donut charts (Chart.js), deadline presets, and the caseload finish-date projection
+- `index.html` — page structure: the "Your numbers" form card, then the answer card
+- `style.css` — all styling; colour and font tokens live in `:root` at the top, with dark-mode overrides right after
+- `app.js` — all logic. `CONFIG` at the top holds every program-specific default (requirements, deadline month/day, hours per client, storage key); `compute()` does the math, `render()` updates the page
 - `favicon.svg` — graduation-cap favicon
 - `../local-version/MFT Hours Tracker.html` — archived original single-file version (pre-split), kept outside the repo
 
 ## Conventions & gotchas
 - **Cache-busting:** browsers cache `app.js`/`style.css` hard because the filenames never change between deploys. The CSS/JS links in `index.html` carry a `?v=N` query — bump `N` whenever you change either file, or returning visitors get stale assets. This has bitten before.
 - **Deadline presets** ("next June 1" / the following year) are computed from the current date in `app.js` — never hardcode the year.
-- **Caseload assumption:** ~1 clinical hour per active client per week; that ratio drives the finish-date estimate.
-- External libraries (Chart.js, canvas-confetti) and the Inter font load from CDNs.
+- **Caseload assumption:** ~1 hour per active client per week (`CONFIG.hoursPerClientPerWeek`); that ratio drives the finish estimate.
+- **Wording:** say "total hours/clients", never "clinical". Don't describe relational as "couples and families" — it covers more. Projected finish dates are shown as month + year only, and gaps as rough weeks/months, because they are estimates.
+- **No JS dependencies.** Progress bars and confetti are hand-written. The only external load is Google Fonts (Bricolage Grotesque + Instrument Sans), with system-font fallbacks.
+- **Saved data** lives under the `localStorage` key `mft-hours:v1`. If the stored shape ever changes incompatibly, bump the key rather than migrating.
 
 ## Standards this project depends on
 - [[project-setup]] (`~/vaults/second-brain/AI/skills/system/project-setup.md`) — repo structure, git conventions, documentation rules.
@@ -37,3 +41,7 @@ Why: the personal access token was stored in plaintext in `remote.origin.url` an
 
 ### 2026-08-14 — Brought under the project-setup standard after directory move
 Why: the project moved out of Google Drive to `~/app projects/`. Added `.gitignore`, this `docs/` guide, and a thin `CLAUDE.md`. The folder is intentionally kept nested under a `mft-hours-tracker/` wrapper (alongside a `local-version/` archive) rather than flattened.
+
+### 2026-10-24 — Redesign: simple form-then-answer layout, no libraries
+Why: the old page repeated the same two-tile layout four times (hours, clients, donuts, pace cards) and put the answer below the fold, so it felt hard to navigate, especially on phones. New layout: one form card with four labelled boxes and a deadline picker, and directly under it one answer card with a single plain-language sentence plus a progress bar per requirement. Numbers now persist in `localStorage`. Chart.js and canvas-confetti were removed so nothing can rot.
+Rejected: an "answer first" layout with concentric progress rings, a today→deadline timeline, +/− steppers and pre-filled example numbers — too much going on and confusing for less tech-savvy students. Exact projected finish dates — the estimate can't predict a day, so month + year only. Milestone taglines ("Building momentum") — said nothing useful. The term "clinical hours" — programs say "total hours".
