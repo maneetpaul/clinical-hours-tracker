@@ -129,8 +129,15 @@ button, input { font: inherit; color: inherit; }
   color: var(--ink-2); text-decoration: underline; text-underline-offset: 3px;
 }
 .text-btn:hover { color: var(--ink); }
-.form-foot { margin-top: 16px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px 16px; }
-.text-btn.armed { color: var(--bad); font-weight: 600; }
+.form-foot { margin-top: 16px; }
+.card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+.card-head .card-title { margin: 0; white-space: nowrap; }
+.pill-btn {
+  flex: none; border: 1px solid var(--line); border-radius: 99px; padding: 6px 14px;
+  background: var(--surface-2); color: var(--ink-2); font-size: 14px; font-weight: 600; cursor: pointer;
+}
+.pill-btn:hover { color: var(--ink); }
+.pill-btn.armed { background: var(--bad-soft); color: var(--bad); border-color: transparent; }
 
 /* ── The answer ── */
 .answer { display: flex; flex-direction: column; gap: 18px; }

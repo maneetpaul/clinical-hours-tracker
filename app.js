@@ -100,6 +100,7 @@ function render() {
   $('reqRelLabel').textContent = fmtNum(rows.rel.req);
 
   // Nothing to say until there are hours to work from
+  $('clearAll').hidden = !FIELDS.some((id) => filled(state[id]));
   const started = filled(state.totalHours) || filled(state.relHours);
   $('emptyState').hidden = started;
   $('result').hidden = !started;
@@ -234,13 +235,13 @@ $('clearAll').addEventListener('click', (e) => {
   const btn = e.currentTarget;
   if (!btn.classList.contains('armed')) {
     btn.classList.add('armed');
-    btn.textContent = 'Tap again to clear';
-    clearTimer = setTimeout(() => { btn.classList.remove('armed'); btn.textContent = 'Clear my numbers'; }, 4000);
+    btn.textContent = 'Yes, clear all';
+    clearTimer = setTimeout(() => { btn.classList.remove('armed'); btn.textContent = 'Clear all'; }, 4000);
     return;
   }
   clearTimeout(clearTimer);
   btn.classList.remove('armed');
-  btn.textContent = 'Clear my numbers';
+  btn.textContent = 'Clear all';
   state = { ...defaults(), req: state.req, preset: state.preset, customDate: state.customDate };
   FIELDS.forEach((id) => { $(id).value = ''; });
   save(); render();

@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&display=swap">
-  <link rel="stylesheet" href="style.css?v=6">
+  <link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
 
@@ -29,7 +29,10 @@
 
   <!-- Step one: the form -->
   <section class="card" aria-labelledby="formTitle">
-    <h2 class="card-title" id="formTitle">Your numbers</h2>
+    <div class="card-head">
+      <h2 class="card-title" id="formTitle">Your numbers</h2>
+      <button type="button" class="pill-btn" id="clearAll" hidden>Clear all</button>
+    </div>
     <div class="fields">
       <div class="field">
         <label for="totalHours">Total hours so far</label>
@@ -66,9 +69,7 @@
       </div>
     </div>
     <div class="form-foot">
-      <button type="button" class="text-btn" id="openReqs">Does your program need different totals?</button>
-      <button type="button" class="text-btn" id="clearAll">Clear my numbers</button>
-    </div>
+      <button type="button" class="text-btn" id="openReqs">Does your program need different totals?</button>    </div>
   </section>
 
   <!-- Step two: the answer -->
@@ -144,6 +145,6 @@
   </form>
 </dialog>
 
-<script src="app.js?v=6"></script>
+<script src="app.js?v=7"></script>
 </body>
 </html>
