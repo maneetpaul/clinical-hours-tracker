@@ -25,7 +25,7 @@ No build step — it is static HTML/CSS/JS.
 - **Caseload assumption:** ~1 hour per active client per week (`CONFIG.hoursPerClientPerWeek`); that ratio drives the finish estimate.
 - **Wording:** say "total hours/clients", never "clinical". Don't describe relational as "couples and families" — it covers more. Projected finish dates are shown as month + year only, and gaps as rough weeks/months, because they are estimates.
 - **No JS dependencies.** Progress bars and confetti are hand-written. The only external load is Google Fonts (Bricolage Grotesque + Instrument Sans), with system-font fallbacks.
-- **Pushing hangs (as of 2026-10-24):** the `osxkeychain` git credential appears stale (the token was rotated), so a plain `git push` waits forever for a password. The `gh` CLI is logged in; push with `git -c credential.helper= -c "credential.helper=!gh auth git-credential" push origin main`, or run `gh auth setup-git` once to make that permanent.
+- **Git auth:** pushes to GitHub use the `gh` CLI login (`gh auth setup-git`, set 2026-10-24) because the old `osxkeychain` entry was stale and made `git push` hang. If a push ever hangs again, run `gh auth status` and re-login.
 - **Saved data** lives under the `localStorage` key `mft-hours:v1`. If the stored shape ever changes incompatibly, bump the key rather than migrating.
 
 ## Standards this project depends on
