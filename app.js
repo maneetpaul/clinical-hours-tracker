@@ -46,6 +46,7 @@ const fmtDay   = (d) => d.toLocaleDateString('en-US', { month: 'long', day: 'num
 const plural   = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
 const num      = (v) => Math.max(0, parseFloat(v) || 0);
 const fmtNum   = (n) => (Math.round(n * 10) / 10).toLocaleString('en-US');
+const fmtHrs   = (n) => n.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 const filled   = (v) => String(v ?? '').trim() !== '';
 
 // "about 2 months" / "a few weeks" — never more precise than the estimate deserves
@@ -114,7 +115,7 @@ function render() {
     $(`pace-${r.k}`).textContent =
       r.rem === 0 ? 'All done here.' :
       r.need === null ? `${fmtNum(r.rem)} hrs to go` :
-      `Need about ${Math.ceil(r.need)} hrs a week` + (r.perWeek > 0 ? `, you have about ${fmtNum(r.perWeek)}` : '');
+      `Need about ${fmtHrs(r.need)} hrs a week` + (r.perWeek > 0 ? `, you have about ${fmtNum(r.perWeek)}` : '');
     const chip = $(`chip-${r.k}`);
     chip.hidden = !r.status;
     chip.textContent = r.status;
@@ -138,7 +139,7 @@ function render() {
     sub = 'Pick a new date above to see your pace.';
     mood = 'bad';
   } else if (open.some((r) => r.perWeek === 0)) {
-    head = `You need about ${open.map((r) => `${Math.ceil(r.need)} ${NAMES[r.k]}`).join(' and ')} hours a week.`;
+    head = `You need about ${open.map((r) => `${fmtHrs(r.need)} ${NAMES[r.k]}`).join(' and ')} hours a week.`;
     sub = 'Add how many clients you see each week to estimate when you’ll finish.';
   } else {
     const finish = new Date(Math.max(...open.map((r) => r.finish.getTime())));
