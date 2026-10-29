@@ -7,6 +7,13 @@ Audience includes older, non-tech-savvy students, and it must keep working after
 
 Live at https://maneetpaul.github.io/clinical-hours-tracker. Status: deployed and in active use.
 
+## Working rules
+
+Project-specific rules for anyone working here, on top of the shared rules in [[app-projects-map]].
+
+- Bump the `?v=N` cache-bust query on the CSS/JS links in `index.html` whenever `app.js` or `style.css` changes (see Conventions & gotchas).
+- Pushing to `main` deploys the live site through GitHub Pages.
+
 ## How to run it
 No build step — it is static HTML/CSS/JS.
 - Local preview: open `index.html` directly, or serve the folder: `npx serve -p 5500 .` (matches `.claude/launch.json`).
@@ -29,7 +36,7 @@ No build step — it is static HTML/CSS/JS.
 - **Saved data** lives under the `localStorage` key `mft-hours:v1`. If the stored shape ever changes incompatibly, bump the key rather than migrating.
 
 ## Standards this project depends on
-- [[project-setup]] (`~/vaults/second-brain/AI/skills/system/project-setup.md`) — repo structure, git conventions, documentation rules.
+- [[project-setup]] — repo structure, git conventions, documentation rules.
 - **Hosting exception:** this project uses **GitHub** as its origin remote and **GitHub Pages** as its host, rather than the Frosty bare-repo standard. GitHub Pages serves directly from the repo, so the code must live on GitHub. See the decision log.
 
 ## Decisions
